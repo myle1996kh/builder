@@ -1,0 +1,415 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================
+   SWISS INTERNATIONAL DESIGN SYSTEM
+   ============================================ */
+
+@theme inline {
+  /* Core Colors - Strict Swiss Palette */
+  --color-background: #FFFFFF;
+  --color-foreground: #000000;
+  --color-muted: #F2F2F2;
+  --color-accent: #FF3000;
+  --color-border: #000000;
+  
+  /* Semantic Mappings */
+  --color-card: #FFFFFF;
+  --color-card-foreground: #000000;
+  --color-popover: #FFFFFF;
+  --color-popover-foreground: #000000;
+  --color-primary: #000000;
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: #F2F2F2;
+  --color-secondary-foreground: #000000;
+  --color-muted-foreground: #666666;
+  --color-destructive: #FF3000;
+  --color-input: #000000;
+  --color-ring: #FF3000;
+  
+  /* Chart Colors - Monochrome */
+  --color-chart-1: #000000;
+  --color-chart-2: #333333;
+  --color-chart-3: #666666;
+  --color-chart-4: #999999;
+  --color-chart-5: #CCCCCC;
+  
+  /* Sidebar */
+  --color-sidebar: #F2F2F2;
+  --color-sidebar-foreground: #000000;
+  --color-sidebar-primary: #000000;
+  --color-sidebar-primary-foreground: #FFFFFF;
+  --color-sidebar-accent: #FF3000;
+  --color-sidebar-accent-foreground: #FFFFFF;
+  --color-sidebar-border: #000000;
+  --color-sidebar-ring: #FF3000;
+  
+  /* Radius - Strictly Rectangular */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  
+  /* Fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --radius: 0px;
+  --background: #FFFFFF;
+  --foreground: #000000;
+  --card: #FFFFFF;
+  --card-foreground: #000000;
+  --popover: #FFFFFF;
+  --popover-foreground: #000000;
+  --primary: #000000;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F2F2F2;
+  --secondary-foreground: #000000;
+  --muted: #F2F2F2;
+  --muted-foreground: #666666;
+  --accent: #FF3000;
+  --accent-foreground: #FFFFFF;
+  --destructive: #FF3000;
+  --border: #000000;
+  --input: #000000;
+  --ring: #FF3000;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #FFFFFF;
+  --card: #000000;
+  --card-foreground: #FFFFFF;
+  --popover: #000000;
+  --popover-foreground: #FFFFFF;
+  --primary: #FFFFFF;
+  --primary-foreground: #000000;
+  --secondary: #1A1A1A;
+  --secondary-foreground: #FFFFFF;
+  --muted: #1A1A1A;
+  --muted-foreground: #999999;
+  --accent: #FF3000;
+  --accent-foreground: #FFFFFF;
+  --destructive: #FF3000;
+  --border: #FFFFFF;
+  --input: #FFFFFF;
+  --ring: #FF3000;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "ss02", "ss03";
+  }
+}
+
+/* ============================================
+   SWISS PATTERN TEXTURES
+   ============================================ */
+
+/* Grid Pattern - 24px grid lines */
+.swiss-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Dot Matrix - 16px spacing */
+.swiss-dots {
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Diagonal Lines - 45 degrees */
+.swiss-diagonal {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(0, 0, 0, 0.02) 10px,
+    rgba(0, 0, 0, 0.02) 11px
+  );
+}
+
+/* Noise Texture - Paper grain effect */
+.swiss-noise {
+  position: relative;
+}
+
+.swiss-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.015;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Combined Pattern for Hero */
+.swiss-hero-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    radial-gradient(circle, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px, 16px 16px;
+}
+
+/* ============================================
+   SWISS TYPOGRAPHY UTILITIES
+   ============================================ */
+
+.swiss-heading {
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  font-weight: 900;
+}
+
+.swiss-label {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.swiss-section-number {
+  color: #FF3000;
+  font-weight: 800;
+  font-size: 8.75rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+}
+
+/* ============================================
+   SWISS COMPONENT STYLES
+   ============================================ */
+
+/* Swiss Button */
+.swiss-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid #000000;
+  background: #000000;
+  color: #FFFFFF;
+  transition: all 150ms ease-out;
+}
+
+.swiss-btn:hover {
+  background: #FF3000;
+  border-color: #FF3000;
+  color: #FFFFFF;
+}
+
+.swiss-btn-outline {
+  background: transparent;
+  color: #000000;
+}
+
+.swiss-btn-outline:hover {
+  background: #000000;
+  color: #FFFFFF;
+}
+
+/* Swiss Card */
+.swiss-card {
+  border: 2px solid #000000;
+  background: #FFFFFF;
+  transition: all 150ms ease-out;
+}
+
+.swiss-card:hover {
+  background: #FF3000;
+  border-color: #FF3000;
+}
+
+.swiss-card:hover .swiss-card-title,
+.swiss-card:hover .swiss-card-desc {
+  color: #FFFFFF;
+}
+
+/* Swiss Card Icon Container - changes to white on hover */
+.swiss-card-icon {
+  transition: all 150ms ease-out;
+}
+
+.swiss-card:hover .swiss-card-icon {
+  background: #FFFFFF;
+  border-color: #000000;
+}
+
+.swiss-card:hover .swiss-card-icon svg {
+  color: #000000;
+}
+
+/* Swiss Input */
+.swiss-input {
+  border: 2px solid #000000;
+  background: #FFFFFF;
+  padding: 1rem;
+  font-size: 1rem;
+  transition: border-color 150ms ease-out;
+}
+
+.swiss-input:focus {
+  outline: none;
+  border-color: #FF3000;
+}
+
+.swiss-input::placeholder {
+  color: #999999;
+}
+
+/* Swiss Underline Input */
+.swiss-input-underline {
+  border: none;
+  border-bottom: 2px solid #000000;
+  background: transparent;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  transition: border-color 150ms ease-out;
+}
+
+.swiss-input-underline:focus {
+  outline: none;
+  border-color: #FF3000;
+}
+
+/* ============================================
+   SWISS GEOMETRIC ELEMENTS
+   ============================================ */
+
+.swiss-circle {
+  border-radius: 50%;
+}
+
+.swiss-square {
+  aspect-ratio: 1;
+}
+
+/* ============================================
+   SWISS ANIMATIONS
+   ============================================ */
+
+/* Nav Link Slide Animation */
+.swiss-nav-link {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.swiss-nav-link span {
+  display: block;
+  transition: transform 150ms ease-out;
+}
+
+.swiss-nav-link:hover span {
+  transform: translateY(-100%);
+}
+
+.swiss-nav-link::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 100%;
+  color: #FF3000;
+  transition: transform 150ms ease-out;
+}
+
+.swiss-nav-link:hover::after {
+  transform: translateY(-100%);
+}
+
+/* Icon Rotation */
+.swiss-icon-rotate {
+  transition: all 150ms ease-out;
+}
+
+.swiss-card:hover .swiss-icon-rotate {
+  transform: rotate(90deg);
+  color: #FFFFFF;
+}
+
+.swiss-icon-rotate:hover {
+  transform: rotate(90deg);
+}
+
+/* Scale on Hover */
+.swiss-scale-hover {
+  transition: transform 150ms ease-out;
+}
+
+.swiss-scale-hover:hover {
+  transform: scale(1.05);
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F2F2F2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF3000;
+}
+
+/* ============================================
+   SELECTION STYLE
+   ============================================ */
+
+::selection {
+  background: #FF3000;
+  color: #FFFFFF;
+}
+
+/* ============================================
+   FOCUS STYLES
+   ============================================ */
+
+*:focus-visible {
+  outline: 2px solid #FF3000;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
