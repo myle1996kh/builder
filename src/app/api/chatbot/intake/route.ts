@@ -50,6 +50,41 @@ const OPENAI_COMPAT_BASE_URL = process.env.OPENAI_COMPAT_BASE_URL || 'https://9r
 const OPENAI_COMPAT_MODEL = process.env.OPENAI_COMPAT_MODEL || 'ces-chatbot-gpt-5.4'
 const OPENAI_COMPAT_API_KEY = process.env.OPENAI_COMPAT_API_KEY
 
+function getMissingFields(data: IntakeFormData) {
+  return REQUIRED_FIELDS.filter((field) => !String(data[field] || '').trim())
+}
+
+function getConversationStage(missingFields: string[]) {
+  if (missingFields.length >= 6) return 'discover'
+  if (missingFields.length >= 3) return 'clarify'
+  if (missingFields.length >= 1) return 'qualify'
+  return 'close'
+}
+
+async function tryCreateLeadFromIntake(payload: IntakeFormData & { conversationId?: string }) {
+  const lead = await safeDb(
+    () =>
+      db.lead.create({
+        data: {
+          name: payload.name,
+          email: payload.email,
+          goal: payload.goal,
+          timeSpent: payload.timeSpent,
+          tools: payload.tools,
+          deadline: payload.deadline,
+          budget: payload.budget,
+          freeSlot: payload.freeSlot,
+          friction: payload.friction,
+          source: 'chatbot',
+          conversationId: payload.conversationId,
+        },
+      }),
+    null
+  )
+
+  return lead
+}
+
 function parseJsonFromText(text: string): LlmResult | null {
   try {
     return JSON.parse(text) as LlmResult
@@ -199,6 +234,9 @@ export async function POST(req: NextRequest) {
       baseURL: OPENAI_COMPAT_BASE_URL,
     })
 
+    const missingBefore = getMissingFields(formData)
+    const stage = getConversationStage(missingBefore)
+
     const completion = await client.chat.completions.create({
       model: OPENAI_COMPAT_MODEL,
       temperature: 0.3,
@@ -206,8 +244,13 @@ export async function POST(req: NextRequest) {
         {
           role: 'system',
           content:
-            `You are an intake chatbot for a Builder service website.\n` +
-            `Goal: clarify the user's problem, collect required form fields, and guide to quick submission.\n` +
+            `You are the intake assistant for a problem-first AI automation landing page.\n` +
+            `Brand purpose: help people reclaim time by removing repetitive computer tasks.\n` +
+            `Conversation objective: diagnose bottleneck, propose practical path, collect intake data, and move to submission.\n` +
+            `Always keep flow: Problem -> Approach -> Outcome -> Timeline.\n` +
+            `Tone: natural, concise, practical, human. No jargon unless user asks.\n` +
+            `Ask only 1-2 focused questions each turn.\n` +
+            `Required fields: name,email,goal,timeSpent,deadline,budget,freeSlot,friction.\n` +
             `Respond ONLY valid JSON with schema:\n` +
             `{\n` +
             `  "reply": string,\n` +
@@ -225,16 +268,11 @@ export async function POST(req: NextRequest) {
             `  "readyToSubmit": boolean,\n` +
             `  "missingFields": string[]\n` +
             `}\n` +
-            `Rules:\n` +
-            `- Keep reply concise and action-oriented.\n` +
-            `- If user gives partial info, extract what you can into fields.\n` +
-            `- Ask only 1-2 most important missing questions each turn.\n` +
-            `- readyToSubmit=true only when required fields are known: name,email,goal,timeSpent,deadline,budget,freeSlot,friction.\n` +
-            `- Never include markdown, only raw JSON.`,
+            `No markdown, no prose outside JSON.`,
         },
         {
           role: 'system',
-          content: `Current form data snapshot: ${JSON.stringify(formData)}`,
+          content: `Current intake stage: ${stage}. Missing fields: ${missingBefore.join(', ') || 'none'}. Current form snapshot: ${JSON.stringify(formData)}`,
         },
         ...messages.map((m) => ({ role: m.role, content: m.content })),
       ],
@@ -257,7 +295,32 @@ export async function POST(req: NextRequest) {
     }
 
     const fields = sanitizeFields(parsed.fields || {})
-    const reply = parsed.reply || 'Mình đã ghi nhận thông tin. Cho mình thêm 1-2 chi tiết để chốt form nhé.'
+    const mergedData: IntakeFormData = {
+      ...formData,
+      ...fields,
+    }
+    const missingAfter = getMissingFields(mergedData)
+    const readyToSubmit = Boolean(parsed.readyToSubmit) || missingAfter.length === 0
+
+    let reply = parsed.reply || 'Mình đã ghi nhận thông tin. Cho mình thêm 1-2 chi tiết để chốt form nhé.'
+    let submitted = false
+    let leadId: string | undefined
+
+    if (readyToSubmit) {
+      const lead = await tryCreateLeadFromIntake({
+        ...mergedData,
+        conversationId: conversation.id.startsWith('ephemeral-') ? undefined : conversation.id,
+      })
+
+      if (lead?.id) {
+        submitted = true
+        leadId = lead.id
+        reply =
+          body.language === 'vi'
+            ? 'Mình đã nhận đủ thông tin và gửi thành công. Mình sẽ phản hồi với hướng triển khai sớm nhất nhé.'
+            : 'I have everything needed and your request is now submitted. I will follow up with a practical plan soon.'
+      }
+    }
 
     await appendConversationMessages(conversation.id, [{ role: 'assistant', content: reply }])
 
@@ -267,7 +330,7 @@ export async function POST(req: NextRequest) {
           db.intakeConversation.update({
             where: { id: conversation.id },
             data: {
-              status: parsed.readyToSubmit ? 'ready' : 'collecting',
+              status: submitted ? 'submitted' : readyToSubmit ? 'ready' : 'collecting',
             },
           }),
         null
@@ -280,8 +343,10 @@ export async function POST(req: NextRequest) {
         conversationId: conversation.id,
         reply,
         fields,
-        readyToSubmit: Boolean(parsed.readyToSubmit),
-        missingFields: Array.isArray(parsed.missingFields) ? parsed.missingFields : [],
+        readyToSubmit,
+        missingFields: missingAfter,
+        submitted,
+        leadId,
       },
       { status: 200 }
     )

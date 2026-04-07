@@ -34,6 +34,8 @@ interface IntakeResponse {
   fields?: Partial<IntakeFormData>
   readyToSubmit?: boolean
   missingFields?: string[]
+  submitted?: boolean
+  leadId?: string
   error?: string
 }
 
@@ -130,7 +132,7 @@ export function IntakeChatbot({ className }: IntakeChatbotProps) {
       const merged = { ...formData, ...extractedFields }
       setFormData(merged)
 
-      emitFormUpdate(extractedFields, Boolean(data.readyToSubmit), data.conversationId)
+      emitFormUpdate(extractedFields, Boolean(data.readyToSubmit) && !Boolean(data.submitted), data.conversationId)
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unexpected error'
       setError(message)
