@@ -1,5 +1,8 @@
 'use client'
 
+import React from 'react'
+import { motion } from "framer-motion"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -8,27 +11,22 @@ import { HeroSection } from "@/components/hero-section"
 import { ChatbotPopup } from "@/components/chatbot-popup"
 import { LanguageProvider, useLanguage } from "@/contexts/language-context"
 import { 
-  Plus,
-  User,
-  Wrench,
-  MessageSquare,
-  Target,
-  Zap, 
-  Layers,
-  Sparkles,
-  Blocks,
-  Rocket,
-  Heart,
-  Lightbulb,
-  Clock,
-  Globe
+  Plus, User, Wrench, MessageSquare, Target, Zap, 
+  Layers, Sparkles, Blocks, Rocket, Heart, Lightbulb, Clock, Globe
 } from "lucide-react"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+}
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+}
 
 function LandingPage() {
   const { t, language, setLanguage } = useLanguage()
@@ -46,26 +44,25 @@ function LandingPage() {
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#about" className="swiss-nav-link text-sm font-bold uppercase tracking-widest" data-text={t('nav.about')}>
+            <a href="#about" className="swiss-nav-link text-sm font-bold uppercase tracking-widest">
               <span>{t('nav.about')}</span>
             </a>
-            <a href="#purpose" className="swiss-nav-link text-sm font-bold uppercase tracking-widest" data-text={t('nav.purpose')}>
+            <a href="#purpose" className="swiss-nav-link text-sm font-bold uppercase tracking-widest">
               <span>{t('nav.purpose')}</span>
             </a>
-            <a href="#protocol" className="swiss-nav-link text-sm font-bold uppercase tracking-widest" data-text={t('nav.protocol')}>
+            <a href="#protocol" className="swiss-nav-link text-sm font-bold uppercase tracking-widest">
               <span>{t('nav.protocol')}</span>
             </a>
-            <a href="/approach" className="swiss-nav-link text-sm font-bold uppercase tracking-widest" data-text={t('nav.approach')}>
+            <a href="/approach" className="swiss-nav-link text-sm font-bold uppercase tracking-widest">
               <span>{t('nav.approach')}</span>
             </a>
-            <a href="#contact" className="swiss-nav-link text-sm font-bold uppercase tracking-widest" data-text={t('nav.contact')}>
+            <a href="#contact" className="swiss-nav-link text-sm font-bold uppercase tracking-widest">
               <span>{t('nav.contact')}</span>
             </a>
           </nav>
           
           <div className="flex items-center gap-4">
-            {/* Language Switcher */}
-            <DropdownMenu>
+             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="gap-2 border-2 border-transparent hover:border-black font-bold uppercase tracking-wider">
                   <Globe className="w-4 h-4" />
@@ -100,7 +97,13 @@ function LandingPage() {
       />
 
       {/* Stats Bar */}
-      <section className="border-y-4 border-black bg-muted swiss-grid-pattern">
+      <motion.section 
+        className="border-y-4 border-black bg-muted swiss-grid-pattern"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={staggerContainer}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4">
             {[
@@ -109,86 +112,101 @@ function LandingPage() {
               { value: '100%', label: t('stats.working') },
               { value: '∞', label: t('stats.problems') },
             ].map((stat, index) => (
-              <div 
+              <motion.div 
                 key={index} 
+                variants={fadeInUp}
                 className="p-8 sm:p-12 border-r-2 border-black last:border-r-0 md:last:border-r-2 lg:last:border-r-0 group cursor-pointer swiss-scale-hover"
               >
                 <div className="text-4xl sm:text-5xl font-black tracking-tighter group-hover:text-[#FF3000] transition-colors duration-150">
                   {stat.value}
                 </div>
                 <div className="text-xs font-bold uppercase tracking-widest mt-2">{stat.label}</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* About Section */}
-      <section id="about" className="py-20 sm:py-28 lg:py-32">
+      <motion.section 
+        id="about" 
+        className="py-20 sm:py-28 lg:py-32"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          {/* Section Header */}
-          <div className="flex items-center gap-4 mb-12 lg:mb-16">
+          <motion.div variants={fadeInUp} className="flex items-center gap-4 mb-12 lg:mb-16">
             <span className="swiss-section-number">01.</span>
             <div className="h-[2px] flex-1 bg-black"></div>
-          </div>
+          </motion.div>
           
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-16">
-            {/* Left Column - Title */}
-            <div className="lg:col-span-5">
-              <Badge variant="outline" className="mb-4 border-2 border-[#FF3000] bg-[#FF3000] text-white rounded-none px-4 py-2 font-bold uppercase tracking-wider">
-                <User className="w-3 h-3 mr-2" />
-                {t('about.badge')}
-              </Badge>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.95] mb-6">
-                {t('about.title')}
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8">
-                {t('about.subtitle')}
-              </p>
+            <div className="lg:col-span-5 flex flex-col">
+              <motion.div variants={fadeInUp}>
+                <Badge variant="outline" className="mb-4 border-2 border-[#FF3000] bg-[#FF3000] text-white rounded-none px-4 py-2 font-bold uppercase tracking-wider">
+                  <User className="w-3 h-3 mr-2" />
+                  {t('about.badge')}
+                </Badge>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.95] mb-6">
+                  {t('about.title')}
+                </h2>
+                <p className="text-lg text-muted-foreground mb-8">
+                  {t('about.subtitle')}
+                </p>
+              </motion.div>
+              <motion.div variants={fadeInUp} className="mt-auto relative w-full aspect-square border-2 border-black hidden lg:block overflow-hidden bg-muted">
+                 <Image src="/images/landing/landing_about.png" alt="Unraveling a knot" fill className="object-cover hover:scale-105 transition-transform duration-500" sizes="(max-width: 1024px) 100vw, 50vw" />
+              </motion.div>
             </div>
             
-            {/* Right Column - Cards */}
             <div className="lg:col-span-7">
               <div className="grid sm:grid-cols-2 gap-4">
-                <Card className="swiss-card rounded-none border-2 border-black">
-                  <CardContent className="p-6">
-                    <div className="swiss-card-icon w-12 h-12 border-2 border-black flex items-center justify-center mb-4 bg-muted">
-                      <Lightbulb className="w-6 h-6" />
-                    </div>
-                    <h3 className="swiss-card-title font-bold uppercase tracking-wider text-sm mb-2">{t('about.selfTaught.title')}</h3>
-                    <p className="swiss-card-desc text-sm text-muted-foreground leading-relaxed">
-                      {t('about.selfTaught.desc')}
-                    </p>
-                  </CardContent>
-                </Card>
+                <motion.div variants={fadeInUp}>
+                  <Card className="swiss-card rounded-none border-2 border-black h-full">
+                    <CardContent className="p-6">
+                      <div className="swiss-card-icon w-12 h-12 border-2 border-black flex items-center justify-center mb-4 bg-muted">
+                        <Lightbulb className="w-6 h-6" />
+                      </div>
+                      <h3 className="swiss-card-title font-bold uppercase tracking-wider text-sm mb-2">{t('about.selfTaught.title')}</h3>
+                      <p className="swiss-card-desc text-sm text-muted-foreground leading-relaxed">
+                        {t('about.selfTaught.desc')}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
                 
-                <Card className="swiss-card rounded-none border-2 border-black">
-                  <CardContent className="p-6">
-                    <div className="swiss-card-icon w-12 h-12 border-2 border-black flex items-center justify-center mb-4 bg-muted">
-                      <MessageSquare className="w-6 h-6" />
-                    </div>
-                    <h3 className="swiss-card-title font-bold uppercase tracking-wider text-sm mb-2">{t('about.listening.title')}</h3>
-                    <p className="swiss-card-desc text-sm text-muted-foreground leading-relaxed">
-                      {t('about.listening.desc')}
-                    </p>
-                  </CardContent>
-                </Card>
+                <motion.div variants={fadeInUp}>
+                  <Card className="swiss-card rounded-none border-2 border-black h-full">
+                    <CardContent className="p-6">
+                      <div className="swiss-card-icon w-12 h-12 border-2 border-black flex items-center justify-center mb-4 bg-muted">
+                        <MessageSquare className="w-6 h-6" />
+                      </div>
+                      <h3 className="swiss-card-title font-bold uppercase tracking-wider text-sm mb-2">{t('about.listening.title')}</h3>
+                      <p className="swiss-card-desc text-sm text-muted-foreground leading-relaxed">
+                        {t('about.listening.desc')}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
                 
-                <Card className="swiss-card rounded-none border-2 border-black sm:col-span-2">
-                  <CardContent className="p-6">
-                    <div className="swiss-card-icon w-12 h-12 border-2 border-black flex items-center justify-center mb-4 bg-muted">
-                      <Heart className="w-6 h-6" />
-                    </div>
-                    <h3 className="swiss-card-title font-bold uppercase tracking-wider text-sm mb-2">{t('about.honesty.title')}</h3>
-                    <p className="swiss-card-desc text-sm text-muted-foreground leading-relaxed">
-                      {t('about.honesty.desc')}
-                    </p>
-                  </CardContent>
-                </Card>
+                <motion.div variants={fadeInUp} className="sm:col-span-2">
+                  <Card className="swiss-card rounded-none border-2 border-black">
+                    <CardContent className="p-6">
+                      <div className="swiss-card-icon w-12 h-12 border-2 border-black flex items-center justify-center mb-4 bg-muted">
+                        <Heart className="w-6 h-6" />
+                      </div>
+                      <h3 className="swiss-card-title font-bold uppercase tracking-wider text-sm mb-2">{t('about.honesty.title')}</h3>
+                      <p className="swiss-card-desc text-sm text-muted-foreground leading-relaxed">
+                        {t('about.honesty.desc')}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               </div>
               
-              {/* Quote Block */}
-              <div className="mt-8 p-8 bg-muted swiss-dots border-2 border-black">
+              <motion.div variants={fadeInUp} className="mt-8 p-8 bg-muted swiss-dots border-2 border-black">
                 <blockquote className="text-xl sm:text-2xl font-medium italic leading-relaxed mb-6">
                   {t('about.quote')}
                 </blockquote>
@@ -201,37 +219,48 @@ function LandingPage() {
                     <div className="text-sm text-muted-foreground">{t('about.signatureDesc')}</div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Purpose Section */}
-      <section id="purpose" className="py-20 sm:py-28 lg:py-32 bg-muted swiss-grid-pattern">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          {/* Section Header */}
-          <div className="flex items-center gap-4 mb-12 lg:mb-16">
+      <motion.section 
+        id="purpose" 
+        className="py-20 sm:py-28 lg:py-32 bg-muted swiss-grid-pattern overflow-hidden relative"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
+          <motion.div variants={fadeInUp} className="flex items-center gap-4 mb-12 lg:mb-16">
             <span className="swiss-section-number">02.</span>
             <div className="h-[2px] flex-1 bg-black"></div>
-          </div>
+          </motion.div>
           
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-16">
-            {/* Left - Title */}
-            <div className="lg:col-span-5">
-              <Badge variant="outline" className="mb-4 border-2 border-[#FF3000] bg-[#FF3000] text-white rounded-none px-4 py-2 font-bold uppercase tracking-wider">
-                <Target className="w-3 h-3 mr-2" />
-                {t('purpose.badge')}
-              </Badge>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.95] mb-6">
-                {t('purpose.title')}
-              </h2>
-              <p className="text-lg text-muted-foreground">
-                {t('purpose.subtitle')}
-              </p>
+            <div className="lg:col-span-5 flex flex-col">
+              <motion.div variants={fadeInUp}>
+                <Badge variant="outline" className="mb-4 border-2 border-[#FF3000] bg-[#FF3000] text-white rounded-none px-4 py-2 font-bold uppercase tracking-wider">
+                  <Target className="w-3 h-3 mr-2" />
+                  {t('purpose.badge')}
+                </Badge>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.95] mb-6">
+                  {t('purpose.title')}
+                </h2>
+                <p className="text-lg text-muted-foreground">
+                  {t('purpose.subtitle')}
+                </p>
+              </motion.div>
+              
+              {/* Insert Image for Purpose */}
+              <motion.div variants={fadeInUp} className="mt-12 relative w-full aspect-video border-2 border-black bg-white">
+                 <Image src="/images/landing/landing_purpose.png" alt="Separating machine from human work" fill className="object-cover hover:scale-105 transition-transform duration-500" sizes="(max-width: 1024px) 100vw, 50vw" />
+              </motion.div>
             </div>
             
-            {/* Right - Cards */}
             <div className="lg:col-span-7">
               <div className="space-y-4">
                 {[
@@ -239,63 +268,70 @@ function LandingPage() {
                   { title: t('purpose.action.title'), desc: t('purpose.action.desc'), icon: Rocket },
                   { title: t('purpose.access.title'), desc: t('purpose.access.desc'), icon: Zap },
                 ].map((item, index) => (
-                  <Card key={index} className="swiss-card rounded-none border-2 border-black bg-white">
-                    <CardContent className="p-6 flex items-start gap-6">
-                      <div className="swiss-card-icon w-16 h-16 border-2 border-black flex items-center justify-center flex-shrink-0 bg-muted swiss-dots">
-                        <item.icon className="w-7 h-7" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="swiss-card-title font-bold uppercase tracking-wider text-lg mb-2">{item.title}</h3>
-                        <p className="swiss-card-desc text-muted-foreground leading-relaxed">{item.desc}</p>
-                      </div>
-                      <Plus className="w-6 h-6 swiss-icon-rotate flex-shrink-0" />
-                    </CardContent>
-                  </Card>
+                  <motion.div variants={fadeInUp} key={index}>
+                    <Card className="swiss-card rounded-none border-2 border-black bg-white">
+                      <CardContent className="p-6 flex items-start gap-6">
+                        <div className="swiss-card-icon w-16 h-16 border-2 border-black flex items-center justify-center flex-shrink-0 bg-muted swiss-dots">
+                          <item.icon className="w-7 h-7" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="swiss-card-title font-bold uppercase tracking-wider text-lg mb-2">{item.title}</h3>
+                          <p className="swiss-card-desc text-muted-foreground leading-relaxed">{item.desc}</p>
+                        </div>
+                        <Plus className="w-6 h-6 swiss-icon-rotate flex-shrink-0" />
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 ))}
               </div>
               
-              {/* Quote */}
-              <div className="mt-8 p-6 bg-black text-white border-2 border-black">
+              <motion.div variants={fadeInUp} className="mt-8 p-6 bg-black text-white border-2 border-black">
                 <p className="text-lg font-medium text-center tracking-wide">
                   {t('purpose.quote')}
                 </p>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Protocol Section */}
-      <section id="protocol" className="py-20 sm:py-28 lg:py-32">
+      <motion.section 
+        id="protocol" 
+        className="py-20 sm:py-28 lg:py-32"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          {/* Section Header */}
-          <div className="flex items-center gap-4 mb-12 lg:mb-16">
+          <motion.div variants={fadeInUp} className="flex items-center gap-4 mb-12 lg:mb-16">
             <span className="swiss-section-number">03.</span>
             <div className="h-[2px] flex-1 bg-black"></div>
-          </div>
+          </motion.div>
           
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-16">
-            {/* Left Column */}
-            <div className="lg:col-span-7">
-              <Badge variant="outline" className="mb-4 border-2 border-[#FF3000] bg-[#FF3000] text-white rounded-none px-4 py-2 font-bold uppercase tracking-wider">
-                <Clock className="w-3 h-3 mr-2" />
-                {t('protocol.badge')}
-              </Badge>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.95] mb-6">
-                {t('protocol.title')}
-              </h2>
-              <p className="text-lg text-muted-foreground mb-12">
-                {t('protocol.subtitle')}
-              </p>
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+            <div className="lg:col-span-7 order-2 lg:order-1">
+              <motion.div variants={fadeInUp}>
+                <Badge variant="outline" className="mb-4 border-2 border-[#FF3000] bg-[#FF3000] text-white rounded-none px-4 py-2 font-bold uppercase tracking-wider">
+                  <Clock className="w-3 h-3 mr-2" />
+                  {t('protocol.badge')}
+                </Badge>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.95] mb-6">
+                  {t('protocol.title')}
+                </h2>
+                <p className="text-lg text-muted-foreground mb-12">
+                  {t('protocol.subtitle')}
+                </p>
+              </motion.div>
 
-              {/* Protocol Steps */}
-              <div className="space-y-6">
+               <motion.div variants={staggerContainer} className="space-y-6">
                 {[
                   { num: '01', title: t('protocol.slot1.title'), desc: t('protocol.slot1.desc') },
                   { num: '02', title: t('protocol.slot2.title'), desc: t('protocol.slot2.desc') },
                   { num: '03', title: t('protocol.slot3.title'), desc: t('protocol.slot3.desc') },
                 ].map((item, index) => (
-                  <div key={index} className="flex gap-6 group">
+                  <motion.div variants={fadeInUp} key={index} className="flex gap-6 group">
                     <div className="w-16 h-16 border-2 border-black flex items-center justify-center flex-shrink-0 bg-muted group-hover:bg-[#FF3000] group-hover:border-[#FF3000] transition-colors duration-150">
                       <span className="font-black text-xl group-hover:text-white transition-colors duration-150">{item.num}</span>
                     </div>
@@ -303,17 +339,20 @@ function LandingPage() {
                       <h3 className="font-bold uppercase tracking-wider text-lg mb-1">{item.title}</h3>
                       <p className="text-muted-foreground">{item.desc}</p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
             
-            {/* Right Column - Timeline Card */}
-            <div className="lg:col-span-5">
-              <Card className="rounded-none border-4 border-black h-full">
+            {/* Timeline with protocol image */}
+            <motion.div variants={fadeInUp} className="lg:col-span-5 order-1 lg:order-2 space-y-6">
+               <div className="relative w-full aspect-[4/3] border-4 border-black bg-muted hidden lg:block overflow-hidden">
+                 <Image src="/images/landing/landing_protocol.png" alt="7-step protocol timeline" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw"/>
+               </div>
+
+              <Card className="rounded-none border-4 border-black bg-white">
                 <CardContent className="p-8">
                   <h3 className="font-bold uppercase tracking-wider text-lg mb-6">{t('protocol.timeline.title')}</h3>
-                  
                   <div className="space-y-4">
                     {[
                       t('protocol.timeline.day1'),
@@ -329,7 +368,6 @@ function LandingPage() {
                       </div>
                     ))}
                   </div>
-                  
                   <div className="mt-8 p-6 bg-muted swiss-dots border-2 border-black">
                     <div className="flex items-center gap-2 mb-2">
                       <Clock className="w-4 h-4 text-[#FF3000]" />
@@ -341,23 +379,27 @@ function LandingPage() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Services Section */}
-      <section className="py-20 sm:py-28 lg:py-32 bg-muted swiss-grid-pattern">
+      <motion.section 
+        className="py-20 sm:py-28 lg:py-32 bg-muted swiss-grid-pattern"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          {/* Section Header */}
-          <div className="flex items-center gap-4 mb-12 lg:mb-16">
+          <motion.div variants={fadeInUp} className="flex items-center gap-4 mb-12 lg:mb-16">
             <span className="swiss-section-number">04.</span>
             <div className="h-[2px] flex-1 bg-black"></div>
-          </div>
+          </motion.div>
           
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-16">
-            {/* Left - Title */}
-            <div className="lg:col-span-4">
+            <motion.div variants={fadeInUp} className="lg:col-span-4">
               <Badge variant="outline" className="mb-4 border-2 border-[#FF3000] bg-[#FF3000] text-white rounded-none px-4 py-2 font-bold uppercase tracking-wider">
                 <Wrench className="w-3 h-3 mr-2" />
                 {t('services.badge')}
@@ -371,10 +413,9 @@ function LandingPage() {
               <p className="text-sm font-medium border-2 border-black bg-white p-4 leading-relaxed">
                 {t('services.disclaimer')}
               </p>
-            </div>
+            </motion.div>
             
-            {/* Right - Services Grid */}
-            <div className="lg:col-span-8">
+            <motion.div variants={staggerContainer} className="lg:col-span-8">
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[
                   { title: t('services.automation.title'), desc: t('services.automation.desc'), icon: Zap },
@@ -384,36 +425,43 @@ function LandingPage() {
                   { title: t('services.content.title'), desc: t('services.content.desc'), icon: Sparkles },
                   { title: t('services.process.title'), desc: t('services.process.desc'), icon: Target },
                 ].map((item, index) => (
-                  <Card key={index} className="swiss-card rounded-none border-2 border-black bg-white">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="swiss-card-icon w-10 h-10 border-2 border-black flex items-center justify-center bg-muted">
-                          <item.icon className="w-5 h-5" />
+                  <motion.div variants={fadeInUp} key={index}>
+                    <Card className="swiss-card rounded-none border-2 border-black bg-white h-full">
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="swiss-card-icon w-10 h-10 border-2 border-black flex items-center justify-center bg-muted">
+                            <item.icon className="w-5 h-5" />
+                          </div>
+                          <Plus className="w-5 h-5 swiss-icon-rotate" />
                         </div>
-                        <Plus className="w-5 h-5 swiss-icon-rotate" />
-                      </div>
-                      <h3 className="swiss-card-title font-bold uppercase tracking-wider text-sm mb-2">{item.title}</h3>
-                      <p className="swiss-card-desc text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-                    </CardContent>
-                  </Card>
+                        <h3 className="swiss-card-title font-bold uppercase tracking-wider text-sm mb-2">{item.title}</h3>
+                        <p className="swiss-card-desc text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Packages Section */}
-      <section className="py-20 sm:py-28 lg:py-32">
+      <motion.section 
+        className="py-20 sm:py-28 lg:py-32"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          {/* Section Header */}
-          <div className="flex items-center gap-4 mb-12 lg:mb-16">
+          <motion.div variants={fadeInUp} className="flex items-center gap-4 mb-12 lg:mb-16">
             <span className="swiss-section-number">05.</span>
             <div className="h-[2px] flex-1 bg-black"></div>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-16">
-            <div className="lg:col-span-4">
+            <motion.div variants={fadeInUp} className="lg:col-span-4">
               <Badge variant="outline" className="mb-4 border-2 border-[#FF3000] bg-[#FF3000] text-white rounded-none px-4 py-2 font-bold uppercase tracking-wider">
                 <Rocket className="w-3 h-3 mr-2" />
                 {t('packages.badge')}
@@ -427,9 +475,9 @@ function LandingPage() {
               <p className="text-sm font-medium border-2 border-black bg-muted p-4 leading-relaxed">
                 {t('packages.note')}
               </p>
-            </div>
+            </motion.div>
 
-            <div className="lg:col-span-8">
+            <motion.div variants={staggerContainer} className="lg:col-span-8">
               <div className="grid sm:grid-cols-2 gap-4">
                 {[
                   { title: t('packages.lp.title'), desc: t('packages.lp.desc'), time: t('packages.lp.time'), icon: Blocks },
@@ -437,38 +485,45 @@ function LandingPage() {
                   { title: t('packages.tool.title'), desc: t('packages.tool.desc'), time: t('packages.tool.time'), icon: Wrench },
                   { title: t('packages.automation.title'), desc: t('packages.automation.desc'), time: t('packages.automation.time'), icon: Zap },
                 ].map((item, index) => (
-                  <Card key={index} className="swiss-card rounded-none border-2 border-black bg-white">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="swiss-card-icon w-10 h-10 border-2 border-black flex items-center justify-center bg-muted">
-                          <item.icon className="w-5 h-5" />
+                  <motion.div variants={fadeInUp} key={index}>
+                    <Card className="swiss-card rounded-none border-2 border-black bg-white h-full">
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="swiss-card-icon w-10 h-10 border-2 border-black flex items-center justify-center bg-muted">
+                            <item.icon className="w-5 h-5" />
+                          </div>
+                          <span className="text-xs font-black uppercase tracking-widest border-2 border-black px-3 py-1">
+                            {item.time}
+                          </span>
                         </div>
-                        <span className="text-xs font-black uppercase tracking-widest border-2 border-black px-3 py-1">
-                          {item.time}
-                        </span>
-                      </div>
-                      <h3 className="swiss-card-title font-bold uppercase tracking-wider text-sm mb-2">{item.title}</h3>
-                      <p className="swiss-card-desc text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-                    </CardContent>
-                  </Card>
+                        <h3 className="swiss-card-title font-bold uppercase tracking-wider text-sm mb-2">{item.title}</h3>
+                        <p className="swiss-card-desc text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Free Slots Section */}
-      <section className="py-20 sm:py-28 lg:py-32 bg-muted swiss-grid-pattern">
+      <motion.section 
+        className="py-20 sm:py-28 lg:py-32 bg-muted swiss-grid-pattern overflow-hidden"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          {/* Section Header */}
-          <div className="flex items-center gap-4 mb-12 lg:mb-16">
+          <motion.div variants={fadeInUp} className="flex items-center gap-4 mb-12 lg:mb-16">
             <span className="swiss-section-number">06.</span>
             <div className="h-[2px] flex-1 bg-black"></div>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-16">
-            <div className="lg:col-span-5">
+            <motion.div variants={fadeInUp} className="lg:col-span-5">
               <Badge variant="outline" className="mb-4 border-2 border-[#FF3000] bg-[#FF3000] text-white rounded-none px-4 py-2 font-bold uppercase tracking-wider">
                 <Heart className="w-3 h-3 mr-2" />
                 {t('free.badge')}
@@ -479,9 +534,9 @@ function LandingPage() {
               <p className="text-lg text-muted-foreground">
                 {t('free.subtitle')}
               </p>
-            </div>
+            </motion.div>
 
-            <div className="lg:col-span-7">
+            <motion.div variants={fadeInUp} className="lg:col-span-7">
               <Card className="rounded-none border-4 border-black bg-white">
                 <CardContent className="p-8">
                   <div className="space-y-4">
@@ -496,40 +551,41 @@ function LandingPage() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 sm:py-28 lg:py-32">
+      <motion.section 
+        id="contact" 
+        className="py-20 sm:py-28 lg:py-32"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          {/* Section Header */}
-          <div className="flex items-center gap-4 mb-12 lg:mb-16">
+          <motion.div variants={fadeInUp} className="flex items-center gap-4 mb-12 lg:mb-16">
             <span className="swiss-section-number">07.</span>
             <div className="h-[2px] flex-1 bg-black"></div>
-          </div>
+          </motion.div>
 
-          {/* Execution Hook Block */}
-          <div className="mb-12 border-4 border-black bg-white">
+          <motion.div variants={fadeInUp} className="mb-12 border-4 border-black bg-white">
             <div className="bg-black text-white px-5 sm:px-7 py-3 border-b-2 border-black flex items-center gap-2">
               <span className="w-2 h-2 bg-[#FF3000]" />
               <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.14em]">
-                {language === 'vi'
-                  ? 'Máy móc làm thay, để con người được sống'
-                  : 'Time is for living, let machines do the rest'}
+                {language === 'vi' ? 'Máy móc làm thay, để con người được sống' : 'Time is for living, let machines do the rest'}
               </span>
             </div>
 
-            <div className="grid lg:grid-cols-12 gap-0">
+            <div className="grid lg:grid-cols-12 gap-0 items-stretch">
               <div className="lg:col-span-7 p-6 sm:p-8 lg:p-10 bg-black text-white">
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#FF3000] mb-3">
                   {language === 'vi' ? 'Gỡ Rối Cuộc Sống' : 'Free Your Time'}
                 </p>
                 <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter leading-[1.03] mb-4 text-balance">
-                  {language === 'vi'
-                    ? 'Bạn đang phí bao nhiêu thanh xuân cho những cú click chuột vô nghĩa?'
-                    : 'How much of your life is stolen by meaningless clicks?'}
+                  {language === 'vi' ? 'Bạn đang phí bao nhiêu thanh xuân cho những cú click chuột vô nghĩa?' : 'How much of your life is stolen by meaningless clicks?'}
                 </h3>
                 <p className="text-gray-300 leading-relaxed max-w-2xl mb-6">
                   {language === 'vi'
@@ -545,49 +601,15 @@ function LandingPage() {
                 </div>
               </div>
 
-              <div className="lg:col-span-5 p-6 sm:p-8 space-y-3 bg-muted">
-                <div className="border-2 border-black bg-white p-4">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-9 h-9 border-2 border-black flex items-center justify-center">
-                      <Target className="w-4 h-4" />
-                    </div>
-                    <p className="text-xs font-black uppercase tracking-widest">{language === 'vi' ? 'Vấn đề' : 'Problem'}</p>
-                  </div>
-                  <p className="text-sm font-medium leading-relaxed">
-                    {language === 'vi' ? 'Mệt mỏi với việc lặp đi lặp lại.' : 'Exhausted by manual, daily tasks.'}
-                  </p>
-                </div>
-
-                <div className="border-2 border-black bg-white p-4">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-9 h-9 border-2 border-[#FF3000] bg-[#FF3000] text-white flex items-center justify-center">
-                      <Clock className="w-4 h-4" />
-                    </div>
-                    <p className="text-xs font-black uppercase tracking-widest text-[#FF3000]">{language === 'vi' ? 'Tiếp cận' : 'Approach'}</p>
-                  </div>
-                  <p className="text-sm font-medium leading-relaxed">
-                    {language === 'vi' ? 'Dùng AI làm nó chạy tự động.' : 'Automate the busywork with AI.'}
-                  </p>
-                </div>
-
-                <div className="border-2 border-black bg-black text-white p-4">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-9 h-9 border-2 border-white bg-white text-black flex items-center justify-center">
-                      <Rocket className="w-4 h-4" />
-                    </div>
-                    <p className="text-xs font-black uppercase tracking-widest text-[#FF3000]">{language === 'vi' ? 'Kết quả' : 'Outcome'}</p>
-                  </div>
-                  <p className="text-sm font-medium leading-relaxed">
-                    {language === 'vi' ? 'Chơi xong rồi, đi uống bia nhé?' : 'Take your afternoon back. Completely free.'}
-                  </p>
-                </div>
-              </div>
+               {/* New Image for Contact Hook */}
+               <div className="lg:col-span-5 bg-muted relative hidden lg:block border-l-2 border-black">
+                 <Image src="/images/landing/landing_contact.png" alt="Contact agreement" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 33vw" priority={false} />
+               </div>
             </div>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-16">
-            {/* Left Column */}
-            <div className="lg:col-span-5">
+            <motion.div variants={fadeInUp} className="lg:col-span-5">
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.95] mb-6">
                 {t('cta.title')}
               </h2>
@@ -595,7 +617,6 @@ function LandingPage() {
                 {t('cta.subtitle')}
               </p>
               
-              {/* Steps */}
               <div className="space-y-4">
                 {[
                   { num: '01', text: t('cta.step1') },
@@ -609,52 +630,35 @@ function LandingPage() {
                 ))}
               </div>
 
-              {/* Contact Links */}
               <div className="mt-8 space-y-3">
                 <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">
                   {language === 'vi' ? 'Hoặc liên hệ trực tiếp' : 'Or reach out directly'}
                 </p>
-                <a
-                  href="https://www.facebook.com/LucyNguyen11/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 border-2 border-black bg-muted hover:bg-[#FF3000] hover:text-white hover:border-[#FF3000] transition-colors duration-150 group"
-                >
+                <a href="https://www.facebook.com/LucyNguyen11/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 border-2 border-black bg-muted hover:bg-[#FF3000] hover:text-white hover:border-[#FF3000] transition-colors duration-150 group">
                   <div className="w-8 h-8 border-2 border-current flex items-center justify-center flex-shrink-0">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                   </div>
                   <span className="text-sm font-bold uppercase tracking-wider">Facebook</span>
                 </a>
-                <a
-                  href="https://zalo.me/0909045605"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 border-2 border-black bg-muted hover:bg-[#FF3000] hover:text-white hover:border-[#FF3000] transition-colors duration-150 group"
-                >
-                  <div className="w-8 h-8 border-2 border-current flex items-center justify-center flex-shrink-0 text-xs font-black">
-                    Z
-                  </div>
+                <a href="https://zalo.me/0909045605" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 border-2 border-black bg-muted hover:bg-[#FF3000] hover:text-white hover:border-[#FF3000] transition-colors duration-150 group">
+                  <div className="w-8 h-8 border-2 border-current flex items-center justify-center flex-shrink-0 text-xs font-black">Z</div>
                   <span className="text-sm font-bold uppercase tracking-wider">Zalo — 0909 045 605</span>
                 </a>
-                <a
-                  href="mailto:le.ntmkh@gmail.com"
-                  className="flex items-center gap-4 p-4 border-2 border-black bg-muted hover:bg-[#FF3000] hover:text-white hover:border-[#FF3000] transition-colors duration-150 group"
-                >
+                <a href="mailto:le.ntmkh@gmail.com" className="flex items-center gap-4 p-4 border-2 border-black bg-muted hover:bg-[#FF3000] hover:text-white hover:border-[#FF3000] transition-colors duration-150 group">
                   <div className="w-8 h-8 border-2 border-current flex items-center justify-center flex-shrink-0">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                   </div>
                   <span className="text-sm font-bold uppercase tracking-wider">le.ntmkh@gmail.com</span>
                 </a>
               </div>
-            </div>
+            </motion.div>
             
-            {/* Right Column - Form */}
-            <div className="lg:col-span-7">
+            <motion.div variants={fadeInUp} className="lg:col-span-7">
               <ContactForm />
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       <ChatbotPopup />
 
