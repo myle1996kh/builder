@@ -196,9 +196,14 @@ export async function POST(req: NextRequest) {
         source: payload.source,
         conversationId: payload.conversationId,
       },
+    }).catch((error) => {
+      console.warn('[contact-intake-db-warning]', error)
+      return {
+        id: `ephemeral-${Date.now()}`,
+      }
     })
 
-    if (payload.conversationId) {
+    if (payload.conversationId && !lead.id.startsWith('ephemeral-')) {
       await db.intakeConversation.update({
         where: { id: payload.conversationId },
         data: {

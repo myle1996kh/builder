@@ -42,7 +42,7 @@ function LandingPage() {
             <div className="w-10 h-10 bg-black flex items-center justify-center">
               <Blocks className="w-6 h-6 text-white" />
             </div>
-            <span className="font-bold text-lg tracking-tight uppercase hidden sm:block">Builder</span>
+            <span className="font-bold text-lg tracking-tight uppercase hidden sm:block">Decompose</span>
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
@@ -516,31 +516,31 @@ function LandingPage() {
               <span className="w-2 h-2 bg-[#FF3000]" />
               <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.14em]">
                 {language === 'vi'
-                  ? 'Nếu một việc lặp lại mỗi ngày, đó là thứ cần tự động hoá trước'
-                  : 'If a task repeats every day, automate that first'}
+                  ? 'Máy móc làm thay, để con người được sống'
+                  : 'Time is for living, let machines do the rest'}
               </span>
             </div>
 
             <div className="grid lg:grid-cols-12 gap-0">
               <div className="lg:col-span-7 p-6 sm:p-8 lg:p-10 bg-black text-white">
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#FF3000] mb-3">
-                  {language === 'vi' ? 'Hook chính' : 'Core hook'}
+                  {language === 'vi' ? 'Gỡ Rối Cuộc Sống' : 'Free Your Time'}
                 </p>
                 <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tighter leading-[1.03] mb-4 text-balance">
                   {language === 'vi'
-                    ? 'Bạn không thiếu ý tưởng. Bạn thiếu một hệ thống để biến ý tưởng thành kết quả.'
-                    : 'You do not lack ideas. You lack a system that turns ideas into outcomes.'}
+                    ? 'Bạn đang phí bao nhiêu thanh xuân cho những cú click chuột vô nghĩa?'
+                    : 'How much of your life is stolen by meaningless clicks?'}
                 </h3>
                 <p className="text-gray-300 leading-relaxed max-w-2xl mb-6">
                   {language === 'vi'
-                    ? 'Mình giúp bạn tách bài toán thành các bước nhỏ có thể triển khai ngay, rồi ship một bản chạy được trong thời gian ngắn.'
-                    : 'I help you decompose the problem into executable chunks, then ship a working version quickly.'}
+                    ? 'Để mình làm một cái tool nhỏ xíu, gánh hết mớ việc chán ngắt đó. Xong rồi mình tắt máy, đi cafe.'
+                    : 'Let me build a tiny tool to carry that boring burden. Then we shut down the laptop and grab a coffee.'}
                 </p>
 
                 <div className="inline-flex items-center gap-2 border-2 border-[#FF3000] bg-[#FF3000] px-4 py-2">
                   <Rocket className="w-4 h-4" />
                   <span className="text-xs sm:text-sm font-black uppercase tracking-wider">
-                    {language === 'vi' ? 'Chia nhỏ đúng. Làm nhanh. Có kết quả.' : 'Decompose right. Build fast. Deliver outcomes.'}
+                    {language === 'vi' ? 'Bỏ việc vặt. Làm việc người.' : 'Drop busywork. Be human.'}
                   </span>
                 </div>
               </div>
@@ -554,7 +554,7 @@ function LandingPage() {
                     <p className="text-xs font-black uppercase tracking-widest">{language === 'vi' ? 'Vấn đề' : 'Problem'}</p>
                   </div>
                   <p className="text-sm font-medium leading-relaxed">
-                    {language === 'vi' ? 'Việc lặp lại, tốn 2–4 giờ mỗi ngày.' : 'Repeated manual work taking 2–4 hours/day.'}
+                    {language === 'vi' ? 'Mệt mỏi với việc lặp đi lặp lại.' : 'Exhausted by manual, daily tasks.'}
                   </p>
                 </div>
 
@@ -566,7 +566,7 @@ function LandingPage() {
                     <p className="text-xs font-black uppercase tracking-widest text-[#FF3000]">{language === 'vi' ? 'Tiếp cận' : 'Approach'}</p>
                   </div>
                   <p className="text-sm font-medium leading-relaxed">
-                    {language === 'vi' ? 'Chia nhỏ workflow, ưu tiên điểm nghẽn impact cao.' : 'Decompose workflow and prioritize high-impact bottlenecks.'}
+                    {language === 'vi' ? 'Dùng AI làm nó chạy tự động.' : 'Automate the busywork with AI.'}
                   </p>
                 </div>
 
@@ -578,7 +578,7 @@ function LandingPage() {
                     <p className="text-xs font-black uppercase tracking-widest text-[#FF3000]">{language === 'vi' ? 'Kết quả' : 'Outcome'}</p>
                   </div>
                   <p className="text-sm font-medium leading-relaxed">
-                    {language === 'vi' ? 'Bản chạy được trong 7 ngày + hướng tối ưu tiếp theo.' : 'Working solution in 7 days + next optimization path.'}
+                    {language === 'vi' ? 'Chơi xong rồi, đi uống bia nhé?' : 'Take your afternoon back. Completely free.'}
                   </p>
                 </div>
               </div>
@@ -660,23 +660,13 @@ function LandingPage() {
 
       {/* Footer */}
       <footer className="mt-auto border-t-4 border-black bg-black text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-8 bg-white flex items-center justify-center">
-                <Blocks className="w-5 h-5 text-black" />
-              </div>
-              <span className="font-bold uppercase tracking-wider">Human-Centered Builder</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10">
+          <div className="flex flex-col items-center justify-center gap-4 text-center">
+            <div className="w-10 h-10 bg-white flex items-center justify-center">
+              <Blocks className="w-6 h-6 text-black" />
             </div>
-            
-            <div className="flex items-center gap-8">
-              <a href="#about" className="text-sm font-bold uppercase tracking-wider hover:text-[#FF3000] transition-colors duration-150">{t('nav.about')}</a>
-              <a href="#purpose" className="text-sm font-bold uppercase tracking-wider hover:text-[#FF3000] transition-colors duration-150">{t('nav.purpose')}</a>
-              <a href="#contact" className="text-sm font-bold uppercase tracking-wider hover:text-[#FF3000] transition-colors duration-150">{t('nav.contact')}</a>
-            </div>
-            
-            <p className="text-sm text-gray-400 font-medium">
-              {t('footer.tagline')}
+            <p className="text-sm sm:text-base text-gray-200 font-semibold tracking-wide">
+              Automate the busywork. Reclaim your time.
             </p>
           </div>
         </div>

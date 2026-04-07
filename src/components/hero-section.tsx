@@ -21,9 +21,9 @@ export function HeroSection({ badge, title1, title2, subtitle, cta1, cta2 }: Her
               <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.12em]">{badge}</span>
             </div>
 
-            <h1 className="max-w-[18ch] text-[clamp(2.5rem,7.2vw,5.25rem)] font-black uppercase tracking-[-0.02em] leading-[0.93] mb-6">
+            <h1 className="max-w-[20ch] text-[clamp(1.9rem,5.2vw,4rem)] font-black uppercase tracking-[-0.01em] leading-[1.08] mb-6">
               <span className="block text-balance">{title1}</span>
-              <span className="block text-[#FF3000] text-balance">{title2}</span>
+              <span className="block mt-3 text-[#FF3000] text-balance">{title2}</span>
             </h1>
 
             <p className="text-base sm:text-lg text-muted-foreground mb-8 max-w-2xl leading-relaxed text-balance">

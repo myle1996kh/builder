@@ -104,37 +104,61 @@ function fallbackReply(formData: IntakeFormData): LlmResult {
   }
 }
 
+async function safeDb<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await fn()
+  } catch (error) {
+    console.warn('[chatbot-intake-db-warning]', error)
+    return fallback
+  }
+}
+
 async function getOrCreateConversation(conversationId: string | undefined, language?: string) {
   if (!conversationId) {
-    return db.intakeConversation.create({
-      data: {
-        language,
-        status: 'collecting',
-      },
-    })
+    return safeDb(
+      () =>
+        db.intakeConversation.create({
+          data: {
+            language,
+            status: 'collecting',
+          },
+        }),
+      { id: `ephemeral-${Date.now()}`, language, status: 'collecting' }
+    )
   }
 
-  const existing = await db.intakeConversation.findUnique({ where: { id: conversationId } })
+  const existing = await safeDb(
+    () => db.intakeConversation.findUnique({ where: { id: conversationId } }),
+    null
+  )
   if (existing) return existing
 
-  return db.intakeConversation.create({
-    data: {
-      id: conversationId,
-      language,
-      status: 'collecting',
-    },
-  })
+  return safeDb(
+    () =>
+      db.intakeConversation.create({
+        data: {
+          id: conversationId,
+          language,
+          status: 'collecting',
+        },
+      }),
+    { id: conversationId, language, status: 'collecting' }
+  )
 }
 
 async function appendConversationMessages(conversationId: string, messages: ChatMessage[]) {
-  if (messages.length === 0) return
-  await db.intakeConversationMessage.createMany({
-    data: messages.map((m) => ({
-      conversationId,
-      role: m.role,
-      content: m.content,
-    })),
-  })
+  if (messages.length === 0 || conversationId.startsWith('ephemeral-')) return
+  await safeDb(
+    () =>
+      db.intakeConversationMessage.createMany({
+        data: messages.map((m) => ({
+          conversationId,
+          role: m.role,
+          content: m.content,
+        })),
+      }),
+    null
+  )
 }
 
 export async function POST(req: NextRequest) {
@@ -237,12 +261,18 @@ export async function POST(req: NextRequest) {
 
     await appendConversationMessages(conversation.id, [{ role: 'assistant', content: reply }])
 
-    await db.intakeConversation.update({
-      where: { id: conversation.id },
-      data: {
-        status: parsed.readyToSubmit ? 'ready' : 'collecting',
-      },
-    })
+    if (!conversation.id.startsWith('ephemeral-')) {
+      await safeDb(
+        () =>
+          db.intakeConversation.update({
+            where: { id: conversation.id },
+            data: {
+              status: parsed.readyToSubmit ? 'ready' : 'collecting',
+            },
+          }),
+        null
+      )
+    }
 
     return NextResponse.json(
       {

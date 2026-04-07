@@ -14,22 +14,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Human-Centered Builder | Small Modules. Real Solutions. 7-Day Launch.",
-  description: "Transform messy, real-world workflows into clean, automated modules. Not just AI playground—we build real solutions for real friction. 3 slots per month, 7-day launch protocol.",
-  keywords: ["AI Builder", "Automation", "Small Modules", "Real Solutions", "7-Day Launch", "Workflow Automation"],
-  authors: [{ name: "Human-Centered Builder" }],
+  title: "Decompose | Break It Down. Ship It Fast.",
+  description: "Every problem can be decomposed. Once it is decomposed, it can be solved. Problem-first AI implementation — 7-day delivery, 3 slots per month.",
+  keywords: ["Decompose", "AI Implementation", "Automation", "Workflow", "Problem Solving", "7-Day Launch"],
+  authors: [{ name: "Decompose" }],
   icons: {
-    icon: "/logo.svg",
+    icon: "/favicon.png",
   },
   openGraph: {
-    title: "Human-Centered Builder | Small Modules. Real Solutions.",
-    description: "Transform messy, real-world workflows into clean, automated modules.",
+    title: "Decompose | Break It Down. Ship It Fast.",
+    description: "Every problem can be decomposed. Once it is decomposed, it can be solved.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Human-Centered Builder",
-    description: "Small Modules. Real Solutions. 7-Day Launch.",
+    title: "Decompose",
+    description: "Break It Down. Ship It Fast.",
   },
 };
 
